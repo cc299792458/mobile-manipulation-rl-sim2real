@@ -392,4 +392,18 @@
       effort="0"
       velocity="0" />
   </joint>
+  <link
+    name="Link_tcp">
+  </link>
+  <joint
+    name="Joint_tcp"
+    type="fixed">
+    <origin
+      xyz="0.14565 0 -0.02045"
+      rpy="0 0 0" />
+    <parent
+      link="Link_3" />
+    <child
+      link="Link_tcp" />
+  </joint>
 </robot>
