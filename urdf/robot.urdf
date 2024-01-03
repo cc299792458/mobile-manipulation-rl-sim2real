@@ -4,6 +4,48 @@
 <!-- |    EDITING THIS FILE BY HAND IS NOT RECOMMENDED                                 | -->
 <!-- =================================================================================== -->
 <robot name="create3">
+  <link name="world_link"/>
+  <joint name="x_joint" type="prismatic">
+    <parent link="world_link"/>
+    <child link="x_link"/>
+    <origin xyz="0 0 0"/>
+    <axis xyz="1 0 0" />
+    <limit
+      lower="-5"
+      upper="5"
+      effort="0"
+      velocity="0" />
+  </joint>  
+  <link name="x_link"/>
+  <joint name="y_joint" type="prismatic">
+    <parent link="x_link"/>
+    <child link="y_link"/>
+    <origin xyz="0 0 0"/>
+    <axis xyz="0 1 0" />
+    <limit
+      lower="-5"
+      upper="5"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link name="y_link"/>
+  <joint name="theta_joint" type="revolute">
+    <parent link="y_link"/>
+    <child link="theta_link"/>
+    <origin xyz="0 0 0"/>
+    <axis xyz="0 0 1" />
+    <limit
+      lower="-6.28"
+      upper="6.28"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link name="theta_link"/>
+  <joint name="base_joint" type="fixed">
+    <parent link="theta_link"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0"/>
+  </joint>
   <!-- Create 3 base definition-->
   <link name="base_link">
     <visual>

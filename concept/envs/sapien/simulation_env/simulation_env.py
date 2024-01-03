@@ -39,21 +39,27 @@ class SimulationEnv:
         return viewer
         
     def load_robot(self, scene: sapien.Scene):
+        # Load robot
         filename = './urdf/robot.urdf'
         loader = scene.create_urdf_loader()
         robot_builder = loader.load_file_as_articulation_builder(filename)
         robot = robot_builder.build(fix_root_link=True)
         robot.set_root_pose(sapien.Pose([0, 0, 0], [1, 0, 0, 0]))
-        arm_control_params = np.array([2e3, 4e2, 5e2])  # This PD is far larger than real to improve stability
+        # Set control parameters
+        base_control_params = np.array([0, 2e2, 5e2])
+        arm_control_params = np.array([2e3, 4e2, 5e2])
         gripper_control_params = np.array([2e3, 1e2, 5e2])
         arm_joint_names = [f"Joint_{i}" for i in range(0, 8)]
+        base_joint_names = ["x_joint", "y_joint", "theta_joint"]
         for joint in robot.get_active_joints():
             name = joint.get_name()
-            if name in arm_joint_names:
+            if name in base_joint_names:
+                joint.set_drive_property(*(1 * base_control_params), mode="force")
+            elif name in arm_joint_names:
                 joint.set_drive_property(*(1 * arm_control_params), mode="force")
             else:
                 joint.set_drive_property(*(1 * gripper_control_params), mode="force")
-        # color the links here
+        # Color the links here
         visual_body_colors = [[127,127,127],[  0,120,176],[255,127, 42],[  0,159, 60],[226, 41, 44],[149,105,185],[146, 86, 76]]
         robot_links = robot.get_links()
         body_idx = 0
@@ -76,7 +82,8 @@ class SimulationEnv:
         return robot
     
     def initialize_robot(self):
-        init_qpos = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+        # x, y, theta, arm_dof_0, arm_dof_1, arm_dof_2, arm_dof_3, gripper_l, gripper_r
+        init_qpos = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])  
         self.set_qpos(init_qpos)
         self.set_drive_target(init_qpos)
         self.set_drive_velocity_target(np.zeros_like(init_qpos))
@@ -116,13 +123,27 @@ class SimulationEnv:
         # Using np.clip to apply the bounds to each element
         clipped_arr = np.array([np.clip(arr[i], bounds[i][0], bounds[i][1]) for i in range(len(arr))])
         return clipped_arr
+    
+    def _rotate_2d_vec_by_angle(self, vec, theta):
+        rot_mat = np.array(
+            [[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]]
+        )
+        return rot_mat @ vec
 
     def set_action(self, action):
+        base_action, arm_action, gripper_action = action[0:2], action[2:-1], action[-1]
+        # Set mobile base action
+        ori = self.qpos[2]  # assume the 3rd DoF stands for orientation
+        vel_ego = self._rotate_2d_vec_by_angle(np.hstack([base_action[0], np.array([0])]), ori)
+        self.set_drive_velocity_target(np.hstack([vel_ego, base_action[-1], np.zeros_like(self.qpos[3:])]))
+
+        # Set arm action and gripper action
         if self.controller_type == 'delta_joint_control':
-            action = np.append(action, action[-1])
-            cur_qpos = self.qpos
-            delta_qpos = action * self.action_scale
+            arm_gripper_action = np.hstack([arm_action, gripper_action, gripper_action])
+            cur_qpos = self.qpos[3:]
+            delta_qpos = arm_gripper_action * self.action_scale
             target_qpos = self._clip_with_bounds(cur_qpos + delta_qpos, self.action_limit)
+            target_qpos = np.hstack([np.zeros([3]), target_qpos])
             self.set_drive_target(target_qpos)
             
         elif self.controller_type == 'delta_ee_control':
@@ -142,4 +163,4 @@ class SimulationEnv:
 if __name__ == '__main__':
     sim_env = SimulationEnv()
     while True:
-        sim_env.step(np.array([1, 1, 1, 1, 1]))
+        sim_env.step(np.array([0.1, 1, 0, 0, 0, 0, 0]))
