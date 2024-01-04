@@ -21,7 +21,7 @@ class SimEnv(gym.Env):
         self.engine, self.renderer = self.set_up_engine_renderer()
         self.scene = self.set_up_scene(self.engine)
         self.render_mode = render_mode
-        if self.render_mode:
+        if self.render_mode == 'human':
             self.viewer = self.set_up_viewer(self.scene, self.renderer)
         
         # Set up Robot and its Controller

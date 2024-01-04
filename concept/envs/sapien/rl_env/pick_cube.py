@@ -122,6 +122,6 @@ class PickCube(SimEnv):
         return np.hstack([pose.p, pose.q])
 
 if __name__ == '__main__':
-    env = PickCube(render_mode='human')
+    env = PickCube()
     while True:
         env.step(np.array([0, 0, 0, 0, 0, 0, 0]))
