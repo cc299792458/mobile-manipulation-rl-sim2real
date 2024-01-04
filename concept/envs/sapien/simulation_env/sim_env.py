@@ -71,7 +71,7 @@ class SimEnv(gym.Env):
         robot = robot_builder.build(fix_root_link=True)
         robot.set_root_pose(sapien.Pose([0, 0, 0], [1, 0, 0, 0]))
         # Set control parameters
-        base_control_params = np.array([0, 2e2, 5e2])
+        base_control_params = np.array([0, 2e4, 5e2])
         arm_control_params = np.array([2e3, 4e2, 5e2])
         gripper_control_params = np.array([2e3, 1e2, 5e2])
         base_joint_names = ["x_joint", "y_joint", "theta_joint"]
