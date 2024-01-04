@@ -235,7 +235,7 @@ class SimEnv(gym.Env):
             qf = self.robot.compute_passive_force(gravity=True, coriolis_and_centrifugal=True, external=False)
             self.robot.set_qf(qf)
             self.scene.step()
-            self.render(self.render_mode)
+        self.render(self.render_mode)
             
     def get_obs(self):
         obs_robot = self.get_obs_robot()
