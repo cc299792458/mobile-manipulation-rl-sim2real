@@ -103,6 +103,10 @@ class SimEnv(gym.Env):
                     body_idx += 1
                     if body_idx >= len(visual_body_colors):
                         body_idx = 0
+        # Cache Links
+        self.finger_left_link = [link for link in robot.get_links() if link.get_name() == 'Link_gripper_l'][0]
+        self.finger_right_link = [link for link in robot.get_links() if link.get_name() == 'Link_gripper_r'][0]
+        self.tcp_link = [link for link in robot.get_links() if link.get_name() == 'Link_tcp'][0]
 
         return robot
     
@@ -156,12 +160,12 @@ class SimEnv(gym.Env):
         assert isinstance(actor, sapien.ActorBase), type(actor)
         contacts = self.scene.get_contacts()
 
-        limpulse = self._get_pairwise_contact_impulse(contacts, self.finger1_link, actor)
-        rimpulse = self._get_pairwise_contact_impulse(contacts, self.finger2_link, actor)
+        limpulse = self._get_pairwise_contact_impulse(contacts, self.finger_left_link, actor)
+        rimpulse = self._get_pairwise_contact_impulse(contacts, self.finger_right_link, actor)
 
         # direction to open the gripper
-        ldirection = self.finger1_link.pose.to_transformation_matrix()[:3, 1]
-        rdirection = -self.finger2_link.pose.to_transformation_matrix()[:3, 1]
+        ldirection = self.finger_left_link.pose.to_transformation_matrix()[:3, 1]
+        rdirection = -self.finger_right_link.pose.to_transformation_matrix()[:3, 1]
 
         # angle between impulse and open direction
         langle = self._compute_angle_between(ldirection, limpulse)
