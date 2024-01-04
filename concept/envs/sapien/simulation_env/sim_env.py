@@ -23,7 +23,13 @@ class SimEnv(gym.Env):
         self.render_mode = render_mode
         if self.render_mode == 'human':
             self.viewer = self.set_up_viewer(self.scene, self.renderer)
-        
+            self.render_camera = None
+        else:
+            self.render_camera = self.scene.add_camera('render_camera', width=1024, height=848, fovy=1, near=0.05, far=100)
+            self.render_camera.set_pose(Pose(p=np.array([0.2, 1.0, 0.3]), q=np.array([0.707, 0.0, 0.0, -0.707])))
+            # self.render_camera.set_pose(Pose(p=np.array([1.0, 0.0, 0.3]), q=np.array([0.0, 0.0, 0.0, 1.0])))
+            self.viewer = None
+
         # Set up Robot and its Controller
         self.robot = self.initialize_robot(self.scene)
         self.reset_robot()
@@ -73,7 +79,7 @@ class SimEnv(gym.Env):
         # Set control parameters
         base_control_params = np.array([0, 2e4, 5e2])
         arm_control_params = np.array([2e3, 4e2, 5e2])
-        gripper_control_params = np.array([2e3, 1e2, 5e2])
+        gripper_control_params = np.array([5e3, 1e2, 5e2])
         base_joint_names = ["x_joint", "y_joint", "theta_joint"]
         arm_joint_names = [f"Joint_{i}" for i in range(0, 3)]
         for joint in robot.get_active_joints():
@@ -164,8 +170,8 @@ class SimEnv(gym.Env):
         rimpulse = self._get_pairwise_contact_impulse(contacts, self.finger_right_link, actor)
 
         # direction to open the gripper
-        ldirection = self.finger_left_link.pose.to_transformation_matrix()[:3, 1]
-        rdirection = -self.finger_right_link.pose.to_transformation_matrix()[:3, 1]
+        ldirection = -self.finger_left_link.pose.to_transformation_matrix()[:3, 1]
+        rdirection = self.finger_right_link.pose.to_transformation_matrix()[:3, 1]
 
         # angle between impulse and open direction
         langle = self._compute_angle_between(ldirection, limpulse)
@@ -192,6 +198,8 @@ class SimEnv(gym.Env):
         self._elapsed_steps = 0
         self.reset_robot()
         self.reset_task()
+
+        return self.get_obs()
 
     def step(self, action):
         self.set_action(action)
@@ -265,6 +273,36 @@ class SimEnv(gym.Env):
         self.scene.update_render()
         if mode == 'human':
             self.viewer.render()
+        elif mode == "rgb_array":
+            if self.render_camera is not None:
+                self.render_camera.take_picture()
+                rgba = self.render_camera.get_float_texture('Color')
+                rgb = np.clip(rgba[..., :3] * 255, 0, 255).astype(np.uint8)    
+            else:
+                rgba = self.viewer.window.get_float_texture('Color')
+                rgb = np.clip(rgba[..., :3] * 255, 0, 255).astype(np.uint8)
+            return rgb
+            # images = []
+            # images.append(rgb)
+            # for camera in self._render_cameras.values():
+            #     rgba = camera.get_images(take_picture=True)["Color"]
+            #     rgb = np.clip(rgba[..., :3] * 255, 0, 255).astype(np.uint8)
+            #     images.append(rgb)
+            # if len(images) == 1:
+            #     return images[0]
+            # else:
+            #     raise NotImplementedError
+            # return tile_images(images)
+        elif mode == "cameras":
+            if self.viewer is not None or self.render_camera is not None:
+                images = self.render("rgb_array")
+                self.scene.update_render()
+                return images
+            # if len(self._render_cameras) > 0:
+            #     images = [self.render("rgb_array")]
+            # else:
+            #     images = []
+            
 
     def close(self):
         pass

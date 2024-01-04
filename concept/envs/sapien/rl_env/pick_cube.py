@@ -68,20 +68,38 @@ class PickCube(SimEnv):
     def evaluate(self, **kwargs):
         is_grasped = self.check_grasp(self.cube)
         # is_robot_static = self.check_robot_static()
+        reach_pos = self.cube.get_pose().p - self.goal_site.get_pose().p
+        reach_dis = np.linalg.norm(reach_pos, ord=2)
         return dict(
             is_grasped=is_grasped,
-            # is_robot_static=is_robot_static,
-            success=is_grasped,
+            success=bool(reach_dis <= 0.025),
         )
 
     def get_reward(self, obs, action, info):
-        return None
+        reward = 0
+        ##### Reach reward #####
+        reach_pos = self.tcp_link.get_pose().p - self.cube.get_pose().p
+        reach_dis = np.linalg.norm(reach_pos, ord=2)
+        reach_reward = 1 - np.tanh(5 * reach_dis)
+        reward += reach_reward
+
+        ##### Grasp reward #####
+        is_grasped = self.check_grasp(self.cube)
+        if is_grasped:
+            reward += 1
+            ##### Place reward #####
+            reach_pos = self.cube.get_pose().p - self.goal_site.get_pose().p
+            reach_dis = np.linalg.norm(reach_pos, ord=2)
+            reach_reward = 1 - np.tanh(5 * reach_dis)
+            reward += reach_reward
+
+        return reward
 
     def get_done(self, obs, info):
         return bool(info["success"])
     
     def render(self, mode="console"):
-        if mode == 'human':
+        if mode in ['human', 'rgb_array']:
             self.goal_site.unhide_visual()
             ret = super().render(mode=mode)
             self.goal_site.hide_visual()
@@ -100,9 +118,8 @@ class PickCube(SimEnv):
         if render_material is None:
             render_material = self.renderer.create_material()
             render_material.set_base_color(np.hstack([color, 1.0]))
-
         builder = self.scene.create_actor_builder()
-        builder.add_box_collision(half_size=half_size)
+        builder.add_box_collision(half_size=half_size, density=100)
         builder.add_box_visual(half_size=half_size, material=render_material)
         if static:
             return builder.build_static(name)
@@ -122,6 +139,6 @@ class PickCube(SimEnv):
         return np.hstack([pose.p, pose.q])
 
 if __name__ == '__main__':
-    env = PickCube()
+    env = PickCube(render_mode='human')
     while True:
         env.step(np.array([0, 0, 0, 0, 0, 0, 0]))
