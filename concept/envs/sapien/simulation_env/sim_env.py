@@ -17,7 +17,7 @@ class SimEnv(gym.Env):
             render_mode: human or console
         """
         gym.Env.__init__(self)
-        # Set up Engine, Renderer, and Viewer
+        ###### Set up Engine, Renderer, and Viewer
         self.engine, self.renderer = self.set_up_engine_renderer()
         self.scene = self.set_up_scene(self.engine)
         self.render_mode = render_mode
@@ -29,18 +29,15 @@ class SimEnv(gym.Env):
             self.render_camera.set_pose(Pose(p=np.array([0.2, 1.0, 0.3]), q=np.array([0.707, 0.0, 0.0, -0.707])))
             # self.render_camera.set_pose(Pose(p=np.array([1.0, 0.0, 0.3]), q=np.array([0.0, 0.0, 0.0, 1.0])))
             self.viewer = None
-
-        # Set up Robot and its Controller
+        ###### Set up Robot and its Controller
         self.robot = self.initialize_robot(self.scene)
         self.reset_robot()
         self.initilize_controller(controller_type)
-
-        # Set up Task
+        ###### Set up Task
         self.initialize_task()
-
-        # Others
-        self.observation_space = spaces.Box(low=0, high=100, shape=(1,), dtype=np.float32)
-        self.reset()
+        ###### Others
+        obs = self.reset()
+        self.observation_space = self._convert_observation_to_space(obs)
         
         
     ######----- Basic Settings -----#####
@@ -353,6 +350,52 @@ class SimEnv(gym.Env):
         assert x.ndim == 1, x.ndim
         norm = np.linalg.norm(x)
         return np.zeros_like(x) if norm < eps else (x / norm)
+    
+    def _convert_observation_to_space(self, observation, prefix=""):
+        """Convert observation to OpenAI gym observation space (recursively).
+        Modified from `gym.envs.mujoco_env`
+        """
+        if isinstance(observation, (dict)):
+            # CATUION: Explicitly create a list of key-value tuples
+            # Otherwise, spaces.Dict will sort keys if a dict is provided
+            space = spaces.Dict(
+                [
+                    (k, self._convert_observation_to_space(v, prefix + "/" + k))
+                    for k, v in observation.items()
+                ]
+            )
+        elif isinstance(observation, np.ndarray):
+            shape = observation.shape
+            dtype = observation.dtype
+            low, high = self._get_dtype_bounds(dtype)
+            if np.issubdtype(dtype, np.floating):
+                low, high = -np.inf, np.inf
+            space = spaces.Box(low, high, shape=shape, dtype=dtype)
+        elif isinstance(observation, (float, np.float32, np.float64)):
+            # logger.debug(f"The observation ({prefix}) is a (float) scalar")
+            space = spaces.Box(-np.inf, np.inf, shape=[1], dtype=np.float32)
+        elif isinstance(observation, (int, np.int32, np.int64)):
+            # logger.debug(f"The observation ({prefix}) is a (integer) scalar")
+            space = spaces.Box(-np.inf, np.inf, shape=[1], dtype=int)
+        elif isinstance(observation, (bool, np.bool_)):
+            # logger.debug(f"The observation ({prefix}) is a (bool) scalar")
+            space = spaces.Box(0, 1, shape=[1], dtype=np.bool_)
+        else:
+            raise NotImplementedError(type(observation), observation)
+
+        return space
+    
+    def _get_dtype_bounds(self, dtype: np.dtype):
+        if np.issubdtype(dtype, np.floating):
+            info = np.finfo(dtype)
+            return info.min, info.max
+        elif np.issubdtype(dtype, np.integer):
+            info = np.iinfo(dtype)
+            return info.min, info.max
+        elif np.issubdtype(dtype, np.bool_):
+            return 0, 1
+        else:
+            raise TypeError(dtype)
 
 
 if __name__ == '__main__':

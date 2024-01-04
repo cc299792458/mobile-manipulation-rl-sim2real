@@ -1,0 +1,288 @@
+[T:2024-01-04 15:42:58.008812] ==== [T+0.000] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] logger initialized
+[T:2024-01-04 15:42:58.009584] ==== [T+0.000] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] [2024-01-04 15:42:58.009571] trainer start
+[T:2024-01-04 15:43:02.192458] ==== [T+0.001] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 0
+------------------------------
+| epoch           | 0        |
+| global_steps    | 1000     |
+| total_n_traj    | 1        |
+| train_ep_return | 20.098   |
+------------------------------
+[T:2024-01-04 15:43:04.890737] ==== [T+0.002] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 1
+------------------------------
+| epoch           | 1        |
+| global_steps    | 2000     |
+| total_n_traj    | 2        |
+| train_ep_return | 72.298   |
+------------------------------
+[T:2024-01-04 15:43:07.763113] ==== [T+0.003] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 2
+------------------------------
+| epoch           | 2        |
+| global_steps    | 3000     |
+| total_n_traj    | 3        |
+| train_ep_return | 39.166   |
+------------------------------
+[T:2024-01-04 15:43:10.503897] ==== [T+0.003] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 3
+------------------------------
+| epoch           | 3        |
+| global_steps    | 4000     |
+| total_n_traj    | 4        |
+| train_ep_return | 21.574   |
+------------------------------
+[T:2024-01-04 15:43:13.427504] ==== [T+0.004] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 4
+------------------------------
+| epoch           | 4        |
+| global_steps    | 5000     |
+| total_n_traj    | 5        |
+| train_ep_return | 23.581   |
+------------------------------
+[T:2024-01-04 15:43:16.321158] ==== [T+0.005] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 5
+------------------------------
+| epoch           | 5        |
+| global_steps    | 6000     |
+| total_n_traj    | 6        |
+| train_ep_return | 25.532   |
+------------------------------
+[T:2024-01-04 15:43:19.278748] ==== [T+0.006] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 6
+------------------------------
+| epoch           | 6        |
+| global_steps    | 7000     |
+| total_n_traj    | 7        |
+| train_ep_return | 23.73    |
+------------------------------
+[T:2024-01-04 15:43:22.078750] ==== [T+0.007] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 7
+------------------------------
+| epoch           | 7        |
+| global_steps    | 8000     |
+| total_n_traj    | 8        |
+| train_ep_return | 64.789   |
+------------------------------
+[T:2024-01-04 15:43:25.378954] ==== [T+0.008] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 8
+------------------------------
+| epoch           | 8        |
+| global_steps    | 9000     |
+| total_n_traj    | 9        |
+| train_ep_return | 4.7318   |
+------------------------------
+[T:2024-01-04 15:43:28.134362] ==== [T+0.008] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 9
+-------------------------------------------------------------------------------
+| actor_alpha     | 0.9997                                                    |
+| actor_entropy   | 4.6409                                                    |
+| actor_loss      | 7.0065                                                    |
+| actor_mu        |   -0.1721 |   -0.1018 |   -0.0551 | -0.008431 |   0.08405 |
+| actor_std       |      0.83 |    0.9138 |     0.985 |     1.056 |     1.152 |
+| actor_v_elbo    |     2.388 |     4.015 |     4.634 |     5.254 |     5.896 |
+| critic_loss     | 44.22                                                     |
+| critic_q1       |  -0.08016 |  -0.02642 |  0.007136 |   0.04069 |    0.1157 |
+| critic_q2       |   -0.1309 |  -0.08173 |  -0.05277 |  -0.02381 |    0.0362 |
+| epoch           | 9                                                         |
+| global_steps    | 10000                                                     |
+| total_n_traj    | 10                                                        |
+| train_ep_return | 11.32                                                     |
+-------------------------------------------------------------------------------
+[T:2024-01-04 15:43:46.480485] ==== [T+0.013] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 10
+-------------------------------------------------------------------------------
+| actor_alpha     | 0.7541                                                    |
+| actor_entropy   | 4.7475                                                    |
+| actor_loss      | -12.959                                                   |
+| actor_mu        |  -0.04887 |  -0.01118 |  0.002537 |   0.01625 |   0.06152 |
+| actor_std       |    0.8736 |    0.8982 |    0.9122 |    0.9262 |    0.9569 |
+| actor_v_elbo    |     20.73 |     21.44 |     21.82 |      22.2 |     23.75 |
+| critic_loss     | 0.13251                                                   |
+| critic_q1       |     17.51 |     17.93 |     18.29 |     18.65 |     19.61 |
+| critic_q2       |     17.57 |     17.94 |      18.3 |     18.66 |     19.59 |
+| epoch           | 10                                                        |
+| global_steps    | 11000                                                     |
+| total_n_traj    | 11                                                        |
+| train_ep_return | 39.652                                                    |
+-------------------------------------------------------------------------------
+[T:2024-01-04 15:44:04.691485] ==== [T+0.019] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 11
+--------------------------------------------------------------------------------
+| actor_alpha     | 0.58387                                                    |
+| actor_entropy   | 4.78                                                       |
+| actor_loss      | -26.926                                                    |
+| actor_mu        |  -0.05389 |  -0.01747 | -0.0004788 |   0.01651 |   0.07211 |
+| actor_std       |    0.8485 |    0.8752 |    0.8868 |    0.8984 |    0.9235  |
+| actor_v_elbo    |      31.3 |      33.2 |     33.81 |     34.41 |     35.54  |
+| critic_loss     | 0.070736                                                   |
+| critic_q1       |     28.94 |     30.45 |     31.04 |     31.64 |     32.69  |
+| critic_q2       |     28.88 |     30.46 |     31.05 |     31.65 |     32.67  |
+| epoch           | 11                                                         |
+| global_steps    | 12000                                                      |
+| total_n_traj    | 12                                                         |
+| train_ep_return | 6.7078                                                     |
+--------------------------------------------------------------------------------
+[T:2024-01-04 15:44:22.613990] ==== [T+0.024] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 12
+-------------------------------------------------------------------------------
+| actor_alpha     | 0.45886                                                   |
+| actor_entropy   | 4.7888                                                    |
+| actor_loss      | -37.429                                                   |
+| actor_mu        |  -0.07543 |  -0.02378 |  -0.00279 |    0.0182 |   0.07692 |
+| actor_std       |    0.8523 |    0.8712 |    0.8826 |    0.8939 |    0.9384 |
+| actor_v_elbo    |     40.14 |     42.17 |     42.84 |     43.51 |     45.39 |
+| critic_loss     | 0.057787                                                  |
+| critic_q1       |     38.19 |     39.95 |     40.64 |     41.32 |     42.69 |
+| critic_q2       |     38.26 |     39.96 |     40.62 |     41.29 |     42.73 |
+| epoch           | 12                                                        |
+| global_steps    | 13000                                                     |
+| total_n_traj    | 13                                                        |
+| train_ep_return | 10.854                                                    |
+-------------------------------------------------------------------------------
+[T:2024-01-04 15:44:40.847157] ==== [T+0.029] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 13
+-------------------------------------------------------------------------------
+| actor_alpha     | 0.36361                                                   |
+| actor_entropy   | 4.7641                                                    |
+| actor_loss      | -45.493                                                   |
+| actor_mu        |    -0.117 |  -0.04127 | -0.003231 |   0.03481 |    0.1405 |
+| actor_std       |    0.8439 |     0.867 |    0.8796 |    0.8922 |    0.9407 |
+| actor_v_elbo    |      46.8 |     47.87 |     49.77 |     51.67 |     58.33 |
+| critic_loss     | 0.048221                                                  |
+| critic_q1       |     45.17 |      46.3 |     48.04 |     49.78 |     57.45 |
+| critic_q2       |     45.07 |     46.29 |     48.03 |     49.76 |     57.46 |
+| epoch           | 13                                                        |
+| global_steps    | 14000                                                     |
+| total_n_traj    | 14                                                        |
+| train_ep_return | 9.2256                                                    |
+-------------------------------------------------------------------------------
+[T:2024-01-04 15:44:59.070955] ==== [T+0.034] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 14
+-------------------------------------------------------------------------------
+| actor_alpha     | 0.28943                                                   |
+| actor_entropy   | 4.768                                                     |
+| actor_loss      | -51.16                                                    |
+| actor_mu        |   -0.2068 |  -0.06063 |  0.003835 |    0.0683 |    0.3899 |
+| actor_std       |    0.7926 |    0.8581 |    0.8753 |    0.8924 |    0.9642 |
+| actor_v_elbo    |     50.71 |     52.18 |     54.57 |     56.95 |      65.9 |
+| critic_loss     | 0.056224                                                  |
+| critic_q1       |     49.63 |     50.73 |      53.3 |     55.86 |     65.22 |
+| critic_q2       |     49.62 |     50.73 |     53.28 |     55.84 |     65.09 |
+| epoch           | 14                                                        |
+| global_steps    | 15000                                                     |
+| total_n_traj    | 15                                                        |
+| train_ep_return | 13.45                                                     |
+-------------------------------------------------------------------------------
+[T:2024-01-04 15:45:17.207989] ==== [T+0.039] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 15
+-------------------------------------------------------------------------------
+| actor_alpha     | 0.23095                                                   |
+| actor_entropy   | 4.7724                                                    |
+| actor_loss      | -54.525                                                   |
+| actor_mu        |   -0.2519 |  -0.07765 |  0.001608 |   0.08086 |     0.305 |
+| actor_std       |    0.8313 |    0.8557 |    0.8766 |    0.8975 |    0.9676 |
+| actor_v_elbo    |     53.81 |      55.4 |     57.24 |     59.09 |     66.83 |
+| critic_loss     | 0.055523                                                  |
+| critic_q1       |     52.37 |     54.44 |     56.63 |     58.81 |     65.46 |
+| critic_q2       |     52.44 |     54.43 |     56.66 |     58.89 |     65.47 |
+| epoch           | 15                                                        |
+| global_steps    | 16000                                                     |
+| total_n_traj    | 16                                                        |
+| train_ep_return | 9.4293                                                    |
+-------------------------------------------------------------------------------
+[T:2024-01-04 15:45:35.663085] ==== [T+0.044] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 16
+-------------------------------------------------------------------------------
+| actor_alpha     | 0.18454                                                   |
+| actor_entropy   | 4.757                                                     |
+| actor_loss      | -57.42                                                    |
+| actor_mu        |    -0.375 |   -0.1113 |  0.004982 |    0.1213 |    0.5507 |
+| actor_std       |    0.8053 |    0.8471 |    0.8769 |    0.9067 |     1.025 |
+| actor_v_elbo    |     55.02 |     56.27 |     59.59 |     62.91 |     78.58 |
+| critic_loss     | 0.060779                                                  |
+| critic_q1       |     54.33 |     55.67 |     59.05 |     62.44 |     77.83 |
+| critic_q2       |     54.34 |     55.62 |     59.09 |     62.56 |     79.24 |
+| epoch           | 16                                                        |
+| global_steps    | 17000                                                     |
+| total_n_traj    | 17                                                        |
+| train_ep_return | 9.6123                                                    |
+-------------------------------------------------------------------------------
+[T:2024-01-04 15:45:53.951097] ==== [T+0.049] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 17
+-------------------------------------------------------------------------------
+| actor_alpha     | 0.14758                                                   |
+| actor_entropy   | 4.6624                                                    |
+| actor_loss      | -59.633                                                   |
+| actor_mu        |   -0.4449 |   -0.1522 |  0.008509 |    0.1692 |    0.6965 |
+| actor_std       |    0.7958 |     0.838 |    0.8777 |    0.9174 |     1.037 |
+| actor_v_elbo    |     55.92 |     55.87 |     61.35 |     66.84 |     99.07 |
+| critic_loss     | 0.038927                                                  |
+| critic_q1       |     55.31 |     54.91 |     60.69 |     66.47 |     99.43 |
+| critic_q2       |     55.32 |     54.83 |     60.66 |     66.49 |     99.83 |
+| epoch           | 17                                                        |
+| global_steps    | 18000                                                     |
+| total_n_traj    | 18                                                        |
+| train_ep_return | 5.5894                                                    |
+-------------------------------------------------------------------------------
+[T:2024-01-04 15:46:12.500081] ==== [T+0.054] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 18
+-------------------------------------------------------------------------------
+| actor_alpha     | 0.11812                                                   |
+| actor_entropy   | 4.584                                                     |
+| actor_loss      | -60.582                                                   |
+| actor_mu        |   -0.5966 |    -0.194 |  0.002709 |    0.1994 |    0.9086 |
+| actor_std       |    0.7497 |    0.8277 |    0.8688 |    0.9099 |     1.008 |
+| actor_v_elbo    |      56.1 |     55.03 |     61.95 |     68.87 |      97.7 |
+| critic_loss     | 0.021724                                                  |
+| critic_q1       |     55.45 |     55.19 |     61.73 |     68.27 |     94.28 |
+| critic_q2       |     55.49 |     55.25 |     61.76 |     68.26 |     93.52 |
+| epoch           | 18                                                        |
+| global_steps    | 19000                                                     |
+| total_n_traj    | 19                                                        |
+| train_ep_return | 6.3195                                                    |
+-------------------------------------------------------------------------------
+[T:2024-01-04 15:46:31.622621] ==== [T+0.059] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] epoch 19
+-------------------------------------------------------------------------------
+| actor_alpha     | 0.094618                                                  |
+| actor_entropy   | 4.5522                                                    |
+| actor_loss      | -60.833                                                   |
+| actor_mu        |   -0.7798 |   -0.2414 |  0.005582 |    0.2526 |     1.082 |
+| actor_std       |    0.7365 |    0.8258 |    0.8674 |     0.909 |    0.9827 |
+| actor_v_elbo    |     55.29 |     54.92 |     61.93 |     68.93 |     94.22 |
+| critic_loss     | 0.016504                                                  |
+| critic_q1       |     55.04 |     54.43 |     61.65 |     68.87 |     94.09 |
+| critic_q2       |        55 |     54.44 |     61.65 |     68.86 |     94.01 |
+| epoch           | 19                                                        |
+| global_steps    | 20000                                                     |
+| total_n_traj    | 20                                                        |
+| train_ep_return | 6.6629                                                    |
+-------------------------------------------------------------------------------
+[T:2024-01-04 15:46:31.966808] ==== [T+0.059] ==== [T0:2024-01-04 15:42:58.008749]
+[dir]./workspace/sac/state/PickCubeV0/0/240104_154258_000709 [cmd] python /home/chichu/Documents/Project/mobile-manipulation-rl-sim2real/toys/sac_pickcube.py
+[log] Catch exception at main.py
