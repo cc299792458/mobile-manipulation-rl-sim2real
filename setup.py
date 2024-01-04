@@ -1,12 +1,8 @@
-from setuptools import setup
-
-install_requires = [
-    
-]
+from setuptools import setup, find_packages
 
 setup(
     name='concept',
     version='0.0.1',
-    install_requires=install_requires,
-    py_modules=['concept']
+    packages=find_packages(),
+    install_requires=[]
 )
