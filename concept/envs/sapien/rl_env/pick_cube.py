@@ -11,13 +11,14 @@ import torch
 from concept.envs.vec_env.vec_env import SubprocVectorEnv
 
 
-class PickCubeV0:
-    def __init__(self, batch_size) -> None:
+class PickCube:
+    def __init__(self, batch_size, version='v0') -> None:
         
         def env_maker():
-            env = PickCube()
-            print("made PickCube-v0")
-            return env
+            if version == 'v0':
+                env = PickCube_v0()
+                print("made PickCube-v0")
+                return env
         
         self.dummy_env = env_maker()
         self.obs_shape = self.dummy_env.observation_space.shape
@@ -43,10 +44,38 @@ class PickCubeV0:
         )
     
     def render(self, mode="rgb_array"):
+        # return self.dummy_env.render(mode=mode)
         return self.vec_env.render(mode=mode)
+    
 
+# class PickCubeV0:
 
-class PickCube(SimEnv):
+#     def __init__(self, batch_size) -> None:
+#         assert batch_size ==1
+#         self.dummy_env = PickCube()
+#         self.obs_shape = self.dummy_env.observation_space.shape
+#         self.act_dim = self.dummy_env.action_space.shape[0]
+#         self.episode_length = 1000
+
+#     def reset(self):
+#         obs = self.dummy_env.reset()
+#         return obs[None, ...]
+    
+#     def step(self, action):
+#         if isinstance(action, torch.Tensor):
+#             action = action.cpu().numpy()
+#         obs, reward, done, info = self.dummy_env.step(action)
+#         return (
+#             torch.from_numpy(obs).float(),
+#             torch.from_numpy(reward).float().unsqueeze(-1),
+#             torch.zeros(done.shape).float().unsqueeze(-1),  # halfcheetah v2 is not episodic
+#             info  # list of dict
+#         )
+    
+#     def render(self, mode="rgb_array"):
+#         return self.dummy_env.render(mode=mode)
+
+class PickCube_v0(SimEnv):
     def __init__(self, 
                  **kwargs):
         self.cube_half_size = 0.015
@@ -58,8 +87,8 @@ class PickCube(SimEnv):
         self.goal_site = self._build_sphere_site(self.goal_thresh)
 
     def reset_task(self):
-        self.cube.set_pose(Pose(p=np.array([0.35, 0.0, self.cube_half_size])))
-        self.goal_site.set_pose(Pose(p=np.array([0.35, 0.0, 0.1])))
+        self.cube.set_pose(Pose(p=np.array([0.3, 0.0, self.cube_half_size])))
+        self.goal_site.set_pose(Pose(p=np.array([0.3, 0.0, 0.1])))
 
     def get_obs_task(self):
         obs_task = np.hstack([self._vectorize_pose(self.cube.pose), self._vectorize_pose(self.goal_site.pose)])
@@ -92,6 +121,8 @@ class PickCube(SimEnv):
             reach_dis = np.linalg.norm(reach_pos, ord=2)
             reach_reward = 1 - np.tanh(5 * reach_dis)
             reward += reach_reward
+        
+        reward = reward/3 - 1   # use negtive reward
 
         return reward
 

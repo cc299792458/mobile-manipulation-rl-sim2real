@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from concept.envs import PickCube
+from concept.envs import PickCube_v0
 
 class OpenCVViewer:
     def __init__(self, name="OpenCVViewer", is_rgb=True, exit_on_esc=True):
@@ -42,7 +42,7 @@ class OpenCVViewer:
 
 
 if __name__ == '__main__':
-    env = PickCube()
+    env = PickCube_v0(only_arm=False)
     obs = env.reset()
     opencv_viewer = OpenCVViewer(exit_on_esc=False)
     while True:

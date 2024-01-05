@@ -11,7 +11,8 @@ CONTROLLER_TYPE = ['delta_joint_control', 'delta_ee_control']
 class SimEnv(gym.Env):
     def __init__(self,
                  controller_type='delta_joint_control', 
-                 render_mode='console'):
+                 render_mode='console',
+                 only_arm=True):
         """
             controller_type: controller type, related to action space
             render_mode: human or console
@@ -32,7 +33,7 @@ class SimEnv(gym.Env):
         ###### Set up Robot and its Controller
         self.robot = self.initialize_robot(self.scene)
         self.reset_robot()
-        self.initilize_controller(controller_type)
+        self.initilize_controller(controller_type, only_arm)
         ###### Set up Task
         self.initialize_task()
         ###### Others
@@ -43,6 +44,7 @@ class SimEnv(gym.Env):
     ######----- Basic Settings -----#####
     def set_up_engine_renderer(self):
         engine = sapien.Engine()
+        #TODO: if add depth sensor, maybe need to be modified
         renderer = sapien.SapienRenderer()
         engine.set_renderer(renderer)
         return engine, renderer
@@ -74,6 +76,7 @@ class SimEnv(gym.Env):
         robot = robot_builder.build(fix_root_link=True)
         robot.set_root_pose(sapien.Pose([0, 0, 0], [1, 0, 0, 0]))
         # Set control parameters
+        # TODO: fine-tune control parameters
         base_control_params = np.array([0, 2e4, 5e2])
         arm_control_params = np.array([2e3, 4e2, 5e2])
         gripper_control_params = np.array([5e3, 1e2, 5e2])
@@ -120,27 +123,53 @@ class SimEnv(gym.Env):
         self.set_drive_target(init_qpos)
         self.set_drive_velocity_target(np.zeros_like(init_qpos))
 
-    def initilize_controller(self, controller_type):
+    def initilize_controller(self, controller_type, only_arm):
         """
             delta_joint_control: control the joint directly, using delta_joint.
             delta_ee_control: control the end effector, using delta action. action_space is: theta, r, z, and phi.
-                theta:
+                alpha:
                 r:
                 z:
-                phi:
+                beta:
+            base's controller is velocity control: [translation_velocity, rotation_velocity]
         """
         if controller_type not in CONTROLLER_TYPE:
             raise NotImplementedError
         
+        self.only_arm = only_arm
         self.control_freq = 20
         self.frame_skip = self.simulation_freq // self.control_freq
         self.controller_type = controller_type
+        if not only_arm:
+            self.base_action_scale = np.array([0.2, 0.314])   # 0.2 m/s, 18 degree/s 
+            base_action_dim = 2
+        else:
+            base_action_scale = np.array([])
+            base_action_dim = 0
         if controller_type == 'delta_joint_control':
-            self.action_scale = np.array([0.1, 0.1, 0.1, 0.1, 0.002, 0.002])
-            self.action_limit = self.robot.get_qlimits()
-            self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(7,), dtype=np.float32)    # 2+4+1
+            self.arm_action_scale = np.array([(10/180*np.pi), (10/180*np.pi), (10/180*np.pi), (10/180*np.pi), 0.002])
+            self.arm_action_limit = self.robot.get_qlimits()[3:]
+            arm_action_dim = 5  # 4 arm + 1 gripper
+            self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(base_action_dim + arm_action_dim,), dtype=np.float32)    # 2+4+1
         elif controller_type == 'delta_ee_control':
             raise NotImplementedError
+            self.arm_action_scale = np.array([(10/180*np.pi), 0.025, 0.025, (10/180*np.pi), 0.002])
+            arm_action_limit = None
+            self.action_limit = None
+            # self.action_limit = self.robot.get_qlimits()[3:]
+            self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(base_action_dim + arm_action_dim,), dtype=np.float32)    # 2+4+1
+            
+    def forward_kinematics(self):
+        arm_qpos = self.qpos[3:]
+        alpha = arm_qpos[0]
+        r = None
+        z = None
+        beta = arm_qpos[0] + arm_qpos[1] + arm_qpos[2]
+
+        return alpha, r, z, beta
+
+    def inverse_kinematics(self):
+        pass
 
     @property
     def qpos(self):
@@ -210,18 +239,22 @@ class SimEnv(gym.Env):
         return obs, reward, done, info
 
     def set_action(self, action):
-        base_action, arm_action, gripper_action = action[0:2], action[2:-1], action[-1]
-        # Set mobile base action
-        ori = self.qpos[2]  # assume the 3rd DoF stands for orientation
-        vel_ego = self._rotate_2d_vec_by_angle(np.hstack([base_action[0], np.array([0])]), ori)
-        self.set_drive_velocity_target(np.hstack([vel_ego, base_action[-1], np.zeros_like(self.qpos[3:])]))
-
+        if not self.only_arm:
+            base_action, arm_action = action[0:2], action[2:]
+            # Set mobile base action
+            base_action = base_action * self.base_action_scale
+            ori = self.qpos[2]  # assume the 3rd DoF stands for orientation
+            vel_ego = self._rotate_2d_vec_by_angle(np.hstack([base_action[0], np.array([0])]), ori)
+            self.set_drive_velocity_target(np.hstack([vel_ego, base_action[-1], np.zeros_like(self.qpos[3:])]))
+        else:
+            arm_action = action
         # Set arm action and gripper action
+        # TODO: add motion generation here.
         if self.controller_type == 'delta_joint_control':
-            arm_gripper_action = np.hstack([arm_action, gripper_action, gripper_action])
+            arm_action = arm_action * self.arm_action_scale
             cur_qpos = self.qpos[3:]
-            delta_qpos = arm_gripper_action * self.action_scale
-            target_qpos = self._clip_with_bounds(cur_qpos + delta_qpos, self.action_limit)
+            delta_qpos = np.hstack([arm_action, arm_action[-1]])
+            target_qpos = self._clip_with_bounds(cur_qpos + delta_qpos, self.arm_action_limit)
             target_qpos = np.hstack([np.zeros([3]), target_qpos])
             self.set_drive_target(target_qpos)
             
@@ -399,6 +432,6 @@ class SimEnv(gym.Env):
 
 
 if __name__ == '__main__':
-    sim_env = SimEnv(render_mode='human')
+    sim_env = SimEnv(render_mode='human', only_arm=False)
     while True:
-        sim_env.step(np.array([0.1, 1, 0, 0, 0, 0, 0]))
+        sim_env.step(np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]))

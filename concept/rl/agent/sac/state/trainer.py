@@ -75,10 +75,13 @@ class Trainer(TrainerBase):
             action = self.agent.act(obs, mode="eval").cpu()
             obs, reward, done, info = self.env.step(action)
             ep_return += reward
-            video_frames.append(self.env.render(mode="rgb_array")[0])
+            # img = self.env.render(mode="rgb_array")
+            # if len(img.shape) > 3:
+            #     img = img[0]
+            # video_frames.append(img)
         logger.logkv("eval_epoch", self.epoch_id)
         logger.logkv("eval_ep_return", ep_return)
-        logger.animate(video_frames, f="eval.mp4", fps=30)
+        # logger.animate(video_frames, f="eval.mp4", fps=30)
         self.obs = self.env.reset()
 
 
