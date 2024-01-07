@@ -42,7 +42,7 @@ class OpenCVViewer:
 
 
 if __name__ == '__main__':
-    env = PickCube_v0(only_arm=False)
+    env = PickCube_v0(only_arm=False, controller_type='delta_target_ee_control')
     obs = env.reset()
     opencv_viewer = OpenCVViewer(exit_on_esc=False)
     while True:
@@ -89,8 +89,6 @@ if __name__ == '__main__':
             # env.step(np.array([0.0, 0, 0.0, 0, 0.0, 0.0, -1.]))
         elif key == "r":  # reset env
             obs = env.reset()
-        else:
-            continue
         obs, rew, done, info = env.step(action=action)
         print(f"reward: {rew}")
         print(f"info: {info}")
