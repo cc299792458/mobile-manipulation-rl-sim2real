@@ -1,5 +1,5 @@
-import gym
-from gym import spaces
+import gymnasium as gym
+from gymnasium.wrappers import TimeLimit
 
 import sapien.core as sapien
 from sapien.core import Pose
@@ -9,6 +9,8 @@ from concept.envs.sapien.simulation_env import SimEnv
 
 import torch
 from concept.envs.vec_env.vec_env import SubprocVectorEnv
+
+from stable_baselines3.common.env_checker import check_env
 
 
 class PickCube:
@@ -126,8 +128,8 @@ class PickCube_v0(SimEnv):
 
         return reward
 
-    def get_done(self, obs, info):
-        return bool(info["success"])
+    # def get_done(self, obs, info):
+    #     return bool(info["success"])
     
     def render(self, mode="console"):
         if mode in ['human', 'rgb_array']:
@@ -170,6 +172,11 @@ class PickCube_v0(SimEnv):
         return np.hstack([pose.p, pose.q])
 
 if __name__ == '__main__':
-    env = PickCube(render_mode='human')
+    # env= gym.make('PickCube-v0', render_mode='human')
+    env = PickCube_v0(render_mode='console')
+    env = TimeLimit(env, max_episode_steps=300)
+    # check_env(env)
+    print(env.reset())
+
     while True:
         env.step(np.array([0, 0, 0, 0, 0, 0, 0]))

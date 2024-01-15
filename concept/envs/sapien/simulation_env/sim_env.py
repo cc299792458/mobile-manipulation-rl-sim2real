@@ -3,14 +3,18 @@ import sapien.core as sapien
 from sapien.core import Pose
 from sapien.utils import Viewer
 
-import gym
-from gym import spaces
+import gymnasium as gym
+from gymnasium import spaces
 
 from scipy.optimize import fsolve
+
+from stable_baselines3.common.env_checker import check_env
 
 CONTROLLER_TYPE = ['delta_joint_control', 'delta_target_ee_control']
 
 class SimEnv(gym.Env):
+    metadata = {"render_modes": ["human", "rgb_array", "cameras", "console"], "render_fps": 30}
+
     def __init__(self,
                  controller_type='delta_joint_control', 
                  render_mode='console',
@@ -19,10 +23,10 @@ class SimEnv(gym.Env):
             controller_type: controller type, related to action space
             render_mode: human or console
         """
-        gym.Env.__init__(self)
         ###### Set up Engine, Renderer, and Viewer
         self.engine, self.renderer = self.set_up_engine_renderer()
         self.scene = self.set_up_scene(self.engine)
+        assert render_mode is None or render_mode in self.metadata["render_modes"]
         self.render_mode = render_mode
         if self.render_mode == 'human':
             self.viewer = self.set_up_viewer(self.scene, self.renderer)
@@ -39,9 +43,9 @@ class SimEnv(gym.Env):
         ###### Set up Task
         self.initialize_task()
         ###### Others
-        obs = self.reset()
+        obs, info = self.reset()
         self.observation_space = self._convert_observation_to_space(obs)
-        
+
         
     ######----- Basic Settings -----#####
     def set_up_engine_renderer(self):
@@ -79,7 +83,7 @@ class SimEnv(gym.Env):
         robot.set_root_pose(sapien.Pose([0, 0, 0], [1, 0, 0, 0]))
         # Set control parameters
         # TODO: fine-tune control parameters
-        base_control_params = np.array([0, 2e4, 5e2])
+        base_control_params = np.array([5e2, 2e4, 5e2])
         arm_control_params = np.array([2e3, 4e2, 5e2])
         gripper_control_params = np.array([5e3, 1e2, 5e2])
         base_joint_names = ["x_joint", "y_joint", "theta_joint"]
@@ -246,23 +250,26 @@ class SimEnv(gym.Env):
         pass
 
     #####----- Gym Interface -----##### 
-    def reset(self):
+    def reset(self, seed=None, options=None):
+        super().reset(seed=seed)
         self._elapsed_steps = 0
         self.reset_robot()
         self.reset_task()
 
-        return self.get_obs()
+        return self.get_obs(), self.get_info()
 
     def step(self, action):
         self.set_action(action)
         self._elapsed_steps += 1
 
         obs = self.get_obs()
-        info = self.get_info(obs=obs)
+        info = self.get_info()
         reward = self.get_reward(obs=obs, action=action, info=info)
-        done = self.get_done(obs=obs, info=info)
+        terminated = self.get_terminated(info) 
+        truncated = self.get_truncated()
+        # done = self.get_done(obs=obs, info=info)
 
-        return obs, reward, done, info
+        return obs, reward, terminated, truncated, info
 
     def set_action(self, action):
         if not self.only_arm:
@@ -309,25 +316,31 @@ class SimEnv(gym.Env):
             Get robot's proprioception
         """
         # If use target, should add target into observation
-        obs_robot = np.hstack([self.qpos, self.qvel])
+        obs_robot = np.hstack([self.qpos, self.qvel, self.arm_action_target])
         return obs_robot
 
     def get_obs_task(self):
         return np.array([])
     
-    def get_info(self, obs):
+    def get_info(self):
         info = dict(elapsed_steps=self._elapsed_steps)
         info.update(self.evaluate())
         return info
     
     def evaluate(self):
-        return dict()
+        return dict(success=False)
     
     def get_reward(self, obs, action, info):
-        return None
+        return 0.0
     
-    def get_done(self, obs, info):
-        return None
+    def get_terminated(self, info):
+        return bool(info['success'])
+        
+    def get_truncated(self):
+        return False
+    
+    # def get_done(self, obs, info):
+    #     return None
 
     def render(self, mode='console'):
         self.scene.update_render()
@@ -463,9 +476,10 @@ class SimEnv(gym.Env):
 
 if __name__ == '__main__':
     sim_env = SimEnv(render_mode='human', only_arm=True)
-    import time
+    # check_env(sim_env)
+    # import time
     while True:
-        start_time = time.time()
-        sim_env.step(np.array([0.1, 0.1, 0.1, 0.1, 0.1]))
-        end_time = time.time()
+        # start_time = time.time()
+        sim_env.step(np.array([0.0, 0.0, 0.0, 0.0, 0.0]))
+        # end_time = time.time()
         # print("Step time:", end_time - start_time)
